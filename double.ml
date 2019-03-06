@@ -22,4 +22,42 @@ let mul x = x * 2;;
 
 let double f a = f (f a);;
 
+(* double double
+   => double (double a)
+   => (double a) ((double a) b)
+   => (double a) (double a b)
+   => double a (double a b)
+   => a (a (double a b))
+   => a (a (a (a b)))
+   --- a := inc , b := 0 -------
+   => inc (inc (inc (inc 0)))
+   => 4
+*)
+
+(* double (double double)
+   => (double double) ((double double) a)
+   => (double (double b)) ((double double) a)
+   => ((double b) ((double b) c)) ((double double) a)
+   => ((double b) (double b c)) ((double double) a)
+   => (double b (double b c)) ((double double) a)
+   => (double b (b (b c))) ((double double) a)
+   => (b (b (b (b c)))) ((double double) a)
+   => (b (b (b (b c)))) ((double (double d)) a)
+   => (b (b (b (b c)))) (((double d) ((double d) e)) a)
+   => (b (b (b (b c)))) (((double d) (double d e)) a)
+   => (b (b (b (b c)))) ((double d (double d e)) a)
+   => (b (b (b (b c)))) ((double d (d (d e))) a)
+   => (b (b (b (b c)))) ((d (d (d (d e)))) a)
+   => (b (b (b (b c)))) (a (a (a (a e))))
+   => (a (a (a (a e)))) ((a (a (a (a e)))) ((a (a (a (a e)))) ((a (a (a (a e)))) c)))
+   => (a (a (a (a e)))) ((a (a (a (a e)))) ((a (a (a (a e)))) (a (a (a (a c))))))
+   => (a (a (a (a e)))) ((a (a (a (a e)))) (a (a (a (a (a (a (a (a c)))))))))
+   => (a (a (a (a e)))) (a (a (a (a (a (a (a (a (a (a (a (a c))))))))))))
+   => a (a (a (a (a (a (a (a (a (a (a (a (a (a (a (a c)))))))))))))))
+   --- a := inc , c := 0 -------
+   => inc (inc (inc (inc (inc (inc (inc (inc (inc (inc (inc (inc (inc (inc (inc (inc 0)))))))))))))))
+   => 16
+*)
+
+
 let _ = printf "%d" (((double (double double)) inc) 5);;
